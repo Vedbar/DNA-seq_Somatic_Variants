@@ -191,9 +191,25 @@ gatk CollectSequencingArtifactMetrics -R /home/bqhs/mutect2/Homo_sapiens_assembl
 ## 5. Annotate Variants
 ### Functional annotation 
 (snpEff) → Predicts functional effects of mutations
+
+```
+gunzip -c somatic.filtered.vcf.gz > somatic.filtered.vcf
+snpEff -Xmx2g ann hg38 -v -s snpeff.html somatic.filtered.vcf > somatic.filtered.ann.vcf
+SnpSift annotate /home/bqhs/hg38/dbsnp_146.hg38.vcf.gz somatic.filtered.ann.vcf > somatic.filtered_1.ann.vcf
+
+bcftools query -l somatic.filtered_1.ann.vcf
+```
+
 ### Extract relevant fields 
 (SnpSift extractFields) → Filters and formats VCF for downstream analysis
-
+```
+SnpSift extractFields somatic.filtered_1.ann.vcf \
+    ID CHROM POS REF ALT QUAL DP FILTER \
+    ANN[0].GENE ANN[0].GENEID ANN[0].EFFECT ANN[0].IMPACT \
+    ANN[0].BIOTYPE ANN[0].HGVS_C ANN[0].HGVS_P \
+    GEN[0].GT GEN[0].GQ GEN[0].FT \
+    GEN[1].GT GEN[1].GQ GEN[1].FT > somatic_final.txt
+```
 ---
 
 ## 6. Copy Number Variation
