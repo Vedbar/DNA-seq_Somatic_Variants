@@ -144,25 +144,33 @@ cd Somatic_mutation/Exercise
 -O somatic_m2.vcf.gz
 ```
 
+#### Extract Read Group Information from BAM Header
 ```
-# Sample name
 samtools view -H /home/bqhs/mutect2/tumor.bam | grep '@RG'
 samtools view -H /home/bqhs/mutect2/normal.bam | grep '@RG'
+```
+#### Extract Sample Name Using GATK
+```
 gatk GetSampleName -I /home/bqhs/mutect2/tumor.bam  -O tumor.txt
 gatk GetSampleName -I /home/bqhs/mutect2/normal.bam  -O normal.txt
 ```
 
 ```
-# subsets records that contain a comma in the 5th column.
+# Extract subsets records that contain a comma in the 5th column.
 zcat somatic_m2.vcf.gz | awk '$5 ~","'
-# https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-
+```
+*https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-*
 
+```
+# Displays the first 10,000 lines of the decompressed VCF file
 zcat somatic_m2.vcf.gz | head -n 10000
-
-# Can view the standard Format in the VCF header
+```
+```
+# View the standard Format in the VCF header
 zcat somatic_m2.vcf.gz | grep '##FORMAT'
-
-# Can view the standard INFO in the VCF header
+```
+```
+# View the standard INFO in the VCF header
 zcat somatic_m2.vcf.gz | grep '##INFO'
 ```
 
