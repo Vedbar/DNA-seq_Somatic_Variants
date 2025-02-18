@@ -352,13 +352,62 @@ SnpSift extractFields somatic.filtered_1.ann.vcf \
 ---
 
 ## 6. Copy Number Variation
+
+### Create a New Conda Environment with Python 3.9
+```
+conda create -n cnvkit_env python=3.9 -y
+```
+### Activate the New Environment
+```
+conda activate cnvkit_env
+```
+### Install Pandas 1.5.3
+```
+conda install pandas=1.5.3 -y
+```
+### Install CNVkit
+```
+conda install -c bioconda cnvkit
+```
+### Verify CNVkit Installation
+```
+cnvkit.py version
+```
+
+
 ### Run CNV detection 
-(cnvkit.py batch) → Detects large deletions/amplifications
++ (cnvkit.py batch) → Detects large deletions/amplifications
++ This CNVkit command processes somatic copy number variations (CNVs) in a tumor-normal paired analysis. It generates CNV profiles for the tumor sample using a matched normal sample for comparison.
+```
+cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
+    -n /home/bqhs/mutect2/normal.bam \
+    -t /home/bqhs/mutect2/targets_chr17.interval_list \
+    -f /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+    --annotate /home/bqhs/mutect2/refFlat.txt \
+    --scatter --diagram \
+    -d cnvkit_output
+
+```
 
 ### Call CNVs 
-(cnvkit.py call) → Determines CNV events per sample
++  (cnvkit.py call) → Determines CNV events per sample
++ This command calls copy number alterations (CNAs) from the segmented CNV data (tumor.cns). It converts log2 ratio values into discrete copy number states (e.g., deletions, amplifications, and neutral regions).
++ CNVkit infers integer copy numbers from the log2 ratio data in tumor.cns.
++  It classifies segments as:
+  +  Loss (CN < 2, e.g., deletions)
+  +  Gain (CN > 2, e.g., amplifications)
+  +  Neutral (CN = 2, normal diploid regions)
 
+```
+cd cnvkit_output
+cnvkit.py call tumor.cns -o tumor.call.cns 
+```
+
+### Deactivate Environment After Running
+```
+conda deactivate
+```
 ---
 
 
----
+
