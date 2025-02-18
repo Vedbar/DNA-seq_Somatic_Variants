@@ -378,6 +378,7 @@ cnvkit.py version
 ### Run CNV detection 
 + (cnvkit.py batch) → Detects large deletions/amplifications
 + This CNVkit command processes somatic copy number variations (CNVs) in a tumor-normal paired analysis. It generates CNV profiles for the tumor sample using a matched normal sample for comparison.
+
 ```
 cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
     -n /home/bqhs/mutect2/normal.bam \
@@ -386,7 +387,6 @@ cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
     --annotate /home/bqhs/mutect2/refFlat.txt \
     --scatter --diagram \
     -d cnvkit_output
-
 ```
 
 ### Call CNVs 
