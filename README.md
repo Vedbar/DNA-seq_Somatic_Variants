@@ -1,4 +1,5 @@
 # Somatic Variants Pipeline
+This pipeline is designed to analyze somatic mutations from HCC1143 tumor samples with a matched normal control. It includes preprocessing, somatic variant calling, filtering, annotation, and copy number variation (CNV) detection.
 
 ---
 
@@ -51,19 +52,17 @@ conda config --add channels conda-forge
 ---
 
 ## 2. Genomic Sequencing Data
-+  Explore somatic mutations on HCC1143 tumor sample with matched normal sample.
-+  It is the breast cancer cell line.
-+  Starting files:
-+  BAM files: 
-  +  /home/bqhs/mutect2/tumor.bam, 
-  +  /home/bqhs/mutect2/normal.bam
-  +  Sample names: HCC1143_tumor, HCC1143_normal
-+  Reference: /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta 
-+  PoN: /home/bqhs/mutect2/chr17_m2pon.vcf.gz
-+  Germline AF resource: /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz
-+  Intervals: /home/bqhs/mutect2/targets_chr17.interval_list
-
-+  In the interest of time, we’ll only do somatic variant calling on parts of chr17
+### Sample Information
++ Sample: HCC1143 (Breast Cancer Cell Line)
++ Matched Normal Sample: HCC1143_normal
++ Data files:
+  - Tumor BAM: `/home/bqhs/mutect2/tumor.bam`
+  - Normal BAM: `/home/bqhs/mutect2/normal.bam`
+  - Reference Genome:	`/home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
+  - Panel of Normals (PoN):	`/home/bqhs/mutect2/chr17_m2pon.vcf.gz`
+  - Germline Resource:	`/home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
+  - Target Intervals:	`/home/bqhs/mutect2/targets_chr17.interval_list`
++  In the interest of time,somatic variant calling analysis is restricted to chromosome 17 
 +  Common biallelic SNPs: /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz (for GetPileupSummaries)
 
 Run the pipeline: Mutect2, filter contamination and orientation bias
@@ -88,13 +87,20 @@ Observe the effect of changing the purity setting when converting to copy number
 
 ## 3. Preprocessing Steps 
 
-### Common to Germline and Somatic Variants
-1. QC raw reads (FastQC, Trimmomatic) → Ensures high-quality reads
-2. Align reads (bwa mem) → Maps reads to the reference genome
-3. Sort alignment (samtools sort) → Organizes BAM file
-4. Mark duplicates (picard MarkDuplicates) → Removes PCR artifacts
-5. Recalibrate base quality scores (gatk BaseRecalibrator, gatk ApplyBQSR) → Adjusts systematic sequencing errors
-6. Index BAM file (samtools index) → Enables efficient querying
+### Steps Common to Germline and Somatic Variants
+1. Quality Control:
+  +  FastQC, Trimmomatic → Checks read quality and trims adapters.
+2. Read Alignment:
+  + bwa mem → Maps reads to the reference genome.
+3. Sort alignment
+  + samtools sort → Organizes BAM file
+4. Mark duplicates
+  +  picard MarkDuplicates → Removes PCR artifacts
+5. Recalibrate base quality scores
+  +  GATK BaseRecalibrator & gatk ApplyBQSR → Adjusts systematic sequencing errors
+6. Index BAM file
+  +  samtools index → Enables efficient access to BAM files.
+
 
 ---
 
@@ -105,9 +111,28 @@ mkdir -p Somatic_mutation/Exercise
 cd Somatic_mutation/Exercise
 ```
 
-### 1. Run gatk Mutect2
-+ Detects tumor-specific mutations
-+ Requires both tumor and optionally normal BAM files for filtering
+### 1. Run GATK Mutect2
++  GATK Mutect2 is a variant caller used to detect somatic mutations in cancer samples.
++  It compares sequencing data from a tumor sample to a matched normal sample (if available) to identify mutations unique to the tumor.
++  Arguments:
+  +  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
+    + Reference genome (GRCh38) used to align reads and determine variant locations.
+  +  `-I /home/bqhs/mutect2/tumor.bam`
+    +  Input tumor BAM file (aligned reads from the cancer sample).
+  +  `-tumor HCC1143_tumor`
+    +  Specifies the tumor sample name in the BAM file.
+  +  `-I /home/bqhs/mutect2/normal.bam`
+      +  Input normal BAM file (optional) – helps filter out germline mutations.
+  +  `-normal HCC1143_normal`
+    +  Specifies the normal sample name in the BAM file.
+  +  `-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz`
+    +  Panel of Normals (PoN) a database of common sequencing artifacts (not real mutations) to avoid false positives.
+  +  `--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
+    +  Germline variant database (gnomAD) – used to filter out inherited variants so only tumor-specific mutations remain.
+  +  `-L /home/bqhs/mutect2/chr17plus.interval_list`
+    +  Restricts analysis to specific regions (in this case, chromosome 17) to save time and focus on key areas.
+  +  `-O somatic_m2.vcf.gz`
+    + Output VCF file where the detected somatic variants are stored.
 
 ```
  gatk Mutect2 -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta -I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor -I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal -pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz --germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz -L /home/bqhs/mutect2/chr17plus.interval_list -O somatic_m2.vcf.gz
