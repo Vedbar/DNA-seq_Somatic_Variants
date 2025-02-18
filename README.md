@@ -51,22 +51,20 @@ conda config --add channels conda-forge
 ---
 
 ## 2. Genomic Sequencing Data
-Explore somatic mutations on HCC1143 tumor sample with matched normal sample.
-It is the breast cancer cell line.
++  Explore somatic mutations on HCC1143 tumor sample with matched normal sample.
++  It is the breast cancer cell line.
++  Starting files:
++  BAM files: 
+  +  /home/bqhs/mutect2/tumor.bam, 
+  +  /home/bqhs/mutect2/normal.bam
+  +  Sample names: HCC1143_tumor, HCC1143_normal
++  Reference: /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta 
++  PoN: /home/bqhs/mutect2/chr17_m2pon.vcf.gz
++  Germline AF resource: /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz
++  Intervals: /home/bqhs/mutect2/targets_chr17.interval_list
 
-Starting files:
-BAM files: 
-/home/bqhs/mutect2/tumor.bam, 
-/home/bqhs/mutect2/normal.bam
-
-Sample names: HCC1143_tumor, HCC1143_normal
-
-Reference: /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta 
-PoN: /home/bqhs/mutect2/chr17_m2pon.vcf.gz
-Germline AF resource: /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz
-Intervals: /home/bqhs/mutect2/targets_chr17.interval_list
-In the interest of time, we’ll only do somatic variant calling on parts of chr17
-Common biallelic SNPs: /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz (for GetPileupSummaries)
++  In the interest of time, we’ll only do somatic variant calling on parts of chr17
++  Common biallelic SNPs: /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz (for GetPileupSummaries)
 
 Run the pipeline: Mutect2, filter contamination and orientation bias
 When running Mutect2, specify –L /home/bqhs/mutect2/chr17plus.interval_list
