@@ -1,5 +1,5 @@
 # Somatic Variants Pipeline
-This pipeline is designed to analyze somatic mutations from HCC1143 tumor samples with a matched normal control. It includes preprocessing, somatic variant calling, filtering, annotation, and copy number variation (CNV) detection.
+This repository is designed to analyze somatic mutations from HCC1143 tumor samples with a matched normal control. The pipeline includes preprocessing, somatic variant calling, filtering, annotation, and copy number variation (CNV) detection using widely used bioinformatics tools.
 
 ---
 
