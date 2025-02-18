@@ -135,7 +135,13 @@ cd Somatic_mutation/Exercise
     - Output VCF file where the detected somatic variants are stored.
 
 ```
- gatk Mutect2 -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta -I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor -I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal -pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz --germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz -L /home/bqhs/mutect2/chr17plus.interval_list -O somatic_m2.vcf.gz
+ gatk Mutect2 -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+ -I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor \
+-I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal \
+-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz \
+--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz \
+-L /home/bqhs/mutect2/chr17plus.interval_list \
+-O somatic_m2.vcf.gz
 ```
 
 ```
