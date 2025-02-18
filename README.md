@@ -135,13 +135,14 @@ cd Somatic_mutation/Exercise
     - Output VCF file where the detected somatic variants are stored.
 
 ```
- gatk Mutect2 -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
--I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor \
--I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal \
--pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz \
---germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz \
--L /home/bqhs/mutect2/chr17plus.interval_list \
--O somatic_m2.vcf.gz
+ gatk Mutect2 \
+    -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+    -I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor \
+    -I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal \
+    -pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz \
+    --germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz \
+    -L /home/bqhs/mutect2/chr17plus.interval_list \
+    -O somatic_m2.vcf.gz
 ```
 
 #### Extract Read Group Information from BAM Header
@@ -225,11 +226,21 @@ cat normal.pileups.table | grep '^chr17' | awk '$5>=3'
 
 
 ### 3. gatk CalculateContamination
-+ Estimate sample contamination 
-+ (gatk CalculateContamination) → Accounts for tumor impurity and normal contamination
++ This estimates tumor sample contamination using allele frequencies from the pileup summaries.
++ Arguments:
++ `-I tumor.pileups.table`
+  – Input pileup summary for the tumor sample, which contains allele counts at known germline variant sites.
++ `-matched normal.pileups.table`
+  – The corresponding normal sample pileup summary, used to refine contamination estimation.
++ `-O contamination.table`
+  – Output file storing contamination estimates.
++ If no matched normal is available, contamination can still be estimated, but with reduced accuracy.
 
 ```
- gatk CalculateContamination -I tumor.pileups.table -matched normal.pileups.table -O contamination.table
+gatk CalculateContamination \
+  -I tumor.pileups.table \
+  -matched normal.pileups.table \
+  -O contamination.table
 ```
 
 ### 4. gatk FilterMutectCalls
@@ -237,7 +248,11 @@ cat normal.pileups.table | grep '^chr17' | awk '$5>=3'
 (gatk FilterMutectCalls) → Removes low-confidence calls
 
 ```
-gatk FilterMutectCalls -V somatic_m2.vcf.gz --contamination-table contamination.table -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta -O somatic.filtered.vcf.gz
+gatk FilterMutectCalls \
+  -V somatic_m2.vcf.gz \
+  --contamination-table contamination.table \
+  -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+  -O somatic.filtered.vcf.gz
 ```
 
 ```
