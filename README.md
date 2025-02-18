@@ -116,7 +116,7 @@ cd Somatic_mutation/Exercise
 +  It compares sequencing data from a tumor sample to a matched normal sample (if available) to identify mutations unique to the tumor.
 +  Arguments:
   +  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
-    + Reference genome (GRCh38) used to align reads and determine variant locations.
+  +  Reference genome (GRCh38) used to align reads and determine variant locations.
   +  `-I /home/bqhs/mutect2/tumor.bam`
     +  Input tumor BAM file (aligned reads from the cancer sample).
   +  `-tumor HCC1143_tumor`
