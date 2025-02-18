@@ -136,7 +136,7 @@ cd Somatic_mutation/Exercise
 
 ```
  gatk Mutect2 -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
- -I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor \
+-I /home/bqhs/mutect2/tumor.bam -tumor HCC1143_tumor \
 -I /home/bqhs/mutect2/normal.bam -normal HCC1143_normal \
 -pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz \
 --germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz \
@@ -155,34 +155,69 @@ gatk GetSampleName -I /home/bqhs/mutect2/tumor.bam  -O tumor.txt
 gatk GetSampleName -I /home/bqhs/mutect2/normal.bam  -O normal.txt
 ```
 
+#### Extract subsets records that contain a comma in the 5th column.
 ```
-# Extract subsets records that contain a comma in the 5th column.
 zcat somatic_m2.vcf.gz | awk '$5 ~","'
 ```
 *https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-*
 
+#### Displays the first 10,000 lines of the decompressed VCF file
 ```
-# Displays the first 10,000 lines of the decompressed VCF file
 zcat somatic_m2.vcf.gz | head -n 10000
 ```
+#### View the standard Format in the VCF header
 ```
-# View the standard Format in the VCF header
 zcat somatic_m2.vcf.gz | grep '##FORMAT'
 ```
+#### View the standard INFO in the VCF header
 ```
-# View the standard INFO in the VCF header
 zcat somatic_m2.vcf.gz | grep '##INFO'
 ```
 
-### 2. Run gatk GetPileupSummaries
-+ Summarize pileup metrics 
-+ (gatk GetPileupSummaries) → Gathers read count metrics
+### 2. Run GATK GetPileupSummaries
++ Run gatk GetPileupSummaries – Runs GATK's tool to compute pileup summaries for given sites.
++ This command is used to summarize allele frequencies at common germline variant sites
++ Arguments:
++ `-R Homo_sapiens_assembly38.fasta`
+    -  Reference genome file (GRCh38) required for alignment consistency.
++ `-I normal.bam – Input BAM file (normal sample)`
+    -  containing aligned sequencing reads.
++  `-V chr17_small_exac_common_3_grch38.vcf.gz`
+    -  A population germline variant VCF (from gnomAD/ExAC), which contains known common variants. This is used to distinguish somatic from germline variants.
++  `-L targets_chr17.interval_list`
+    -  Restricts analysis to specific genomic regions (e.g., targeted exome or panel).
++ `O normal.pileups.table`
+    – Output file storing pileup summaries, including:
+    -  Chromosome, position, reference allele
+    -  Counts for reference and alternative alleles
+    -  Population allele frequency estimates
++ This step is preparation for contamination estimation, which is crucial for Mutect2 variant calling.
++ Helps detect tumor-normal contamination by analyzing allele frequencies in the normal sample.
 
 ```
 # For Normal
-gatk GetPileupSummaries -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta -I /home/bqhs/mutect2/normal.bam -V /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz -L /home/bqhs/mutect2/targets_chr17.interval_list -O normal.pileups.table
+gatk GetPileupSummaries \
+  -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+  -I /home/bqhs/mutect2/normal.bam \
+  -V /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz \
+  -L /home/bqhs/mutect2/targets_chr17.interval_list \
+  -O normal.pileups.table
+```
+```
+# For Tumor
+gatk GetPileupSummaries \
+  -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
+  -I /home/bqhs/mutect2/tumor.bam \
+  -V /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz \  
+  -L /home/bqhs/mutect2/targets_chr17.interval_list \
+  -O tumor.pileups.table
+
 ```
 
+#### Displays the contents of the tumor pileup summary table.
++ Filters for lines that start with "chr17"
++ Uses awk to check if the fifth column (alternate allele count) is greater than or equal to 3.
+  
 ```
 cat tumor.pileups.table | grep '^chr17' | awk '$5>=3'
 cat normal.pileups.table | grep '^chr17' | awk '$5>=3'
