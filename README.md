@@ -98,24 +98,24 @@ cd Somatic_mutation/Exercise
 +  GATK Mutect2 is a variant caller used to detect somatic mutations in cancer samples.
 +  It compares sequencing data from a tumor sample to a matched normal sample (if available) to identify mutations unique to the tumor.
 +  Arguments:
-+  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
-    -  Reference genome (GRCh38) used to align reads and determine variant locations.
-+  `-I /home/bqhs/mutect2/tumor.bam`
-    -  Input tumor BAM file (aligned reads from the cancer sample).
-+  `-tumor HCC1143_tumor`
-    -  Specifies the tumor sample name in the BAM file.
-+ `-I /home/bqhs/mutect2/normal.bam`
-    -  Input normal BAM file (optional) – helps filter out germline mutations.
-+  `-normal HCC1143_normal`
-    -  Specifies the normal sample name in the BAM file.
-+  `-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz`
-    -  Panel of Normals (PoN), a database of common sequencing artifacts (not real mutations) to avoid false positives.
-+  `--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
-    -  Germline variant database (gnomAD) used to filter out inherited variants so only tumor-specific mutations remain.
-+  `-L /home/bqhs/mutect2/chr17plus.interval_list`
-    -  Restricts analysis to specific regions (in this case, chromosome 17) to save time and focus on key areas.
-+  `-O somatic_m2.vcf.gz`
-    - Output VCF file where the detected somatic variants are stored.
+  +  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
+      -  Reference genome (GRCh38) used to align reads and determine variant locations.
+  +  `-I /home/bqhs/mutect2/tumor.bam`
+      -  Input tumor BAM file (aligned reads from the cancer sample).
+  +  `-tumor HCC1143_tumor`
+      -  Specifies the tumor sample name in the BAM file.
+  + `-I /home/bqhs/mutect2/normal.bam`
+      -  Input normal BAM file (optional) – helps filter out germline mutations.
+  +  `-normal HCC1143_normal`
+      -  Specifies the normal sample name in the BAM file.
+  +  `-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz`
+      -  Panel of Normals (PoN), a database of common sequencing artifacts (not real mutations) to avoid false positives.
+  +  `--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
+      -  Germline variant database (gnomAD) used to filter out inherited variants so only tumor-specific mutations remain.
+  +  `-L /home/bqhs/mutect2/chr17plus.interval_list`
+      -  Restricts analysis to specific regions (in this case, chromosome 17) to save time and focus on key areas.
+  +  `-O somatic_m2.vcf.gz`
+      - Output VCF file where the detected somatic variants are stored.
 
 ```
  gatk Mutect2 \
@@ -144,6 +144,7 @@ gatk GetSampleName -I /home/bqhs/mutect2/normal.bam  -O normal.txt
 zcat somatic_m2.vcf.gz | awk '$5 ~","'
 ```
 *https://gatk.broadinstitute.org/hc/en-us/articles/360035531692-VCF-Variant-Call-Format*
+
 *https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-*
 
 #### Displays the first 10,000 lines of the decompressed VCF file
@@ -163,19 +164,19 @@ zcat somatic_m2.vcf.gz | grep '##INFO'
 + Runs GATK's GetPileupSummaries tool to compute pileup summaries for given sites.
 + This command is used to summarize allele frequencies at common germline variant sites
 + Arguments:
-+ `-R Homo_sapiens_assembly38.fasta`
-    -  Reference genome file (GRCh38) required for alignment consistency.
-+ `-I Input BAM file (normal sample)`
-    -  containing aligned sequencing reads.
-+  `-V chr17_small_exac_common_3_grch38.vcf.gz`
-    -  A population germline variant VCF (from gnomAD/ExAC), which contains known common variants. This is used to distinguish somatic from germline variants.
-+  `-L targets_chr17.interval_list`
-    -  Restricts analysis to specific genomic regions (e.g., targeted exome or panel).
-+ `O normal.pileups.table`
-    - Output file storing pileup summaries, including:
-      +  Chromosome, position, reference allele
-      +  Counts for reference and alternative alleles
-      +  Population allele frequency estimates
+  + `-R Homo_sapiens_assembly38.fasta`
+      -  Reference genome file (GRCh38) required for alignment consistency.
+  + `-I Input BAM file (normal sample)`
+      -  containing aligned sequencing reads.
+  +  `-V chr17_small_exac_common_3_grch38.vcf.gz`
+      -  A population germline variant VCF (from gnomAD/ExAC), which contains known common variants. This is used to distinguish somatic from germline variants.
+  +  `-L targets_chr17.interval_list`
+      -  Restricts analysis to specific genomic regions (e.g., targeted exome or panel).
+  + `O normal.pileups.table`
+      - Output file storing pileup summaries, including:
+        +  Chromosome, position, reference allele
+        +  Counts for reference and alternative alleles
+        +  Population allele frequency estimates
 + This step is preparation for contamination estimation, which is crucial for Mutect2 variant calling.
 + Helps detect tumor-normal contamination by analyzing allele frequencies in the normal sample.
 
@@ -216,12 +217,12 @@ cat normal.pileups.table | grep '^chr17' | awk '$5>=3'
 ### 3. Run GATK CalculateContamination
 + This estimates tumor sample contamination using allele frequencies from the pileup summaries.
 + Arguments:
-+ `-I tumor.pileups.table`
-    -  Input pileup summary for the tumor sample, which contains allele counts at known germline variant sites.
-+ `-matched normal.pileups.table`
-    -  The corresponding normal sample pileup summary, used to refine contamination estimation.
-+ `-O contamination.table`
-    -  Output file storing contamination estimates.
+  + `-I tumor.pileups.table`
+      -  Input pileup summary for the tumor sample, which contains allele counts at known germline variant sites.
+  + `-matched normal.pileups.table`
+      -  The corresponding normal sample pileup summary, used to refine contamination estimation.
+  + `-O contamination.table`
+      -  Output file storing contamination estimates.
 + If no matched normal is available, contamination can still be estimated, but with reduced accuracy.
 
 ```
@@ -235,14 +236,14 @@ gatk CalculateContamination \
 + Filter somatic variants → Removes low-confidence calls
 + Removes false positives caused by sequencing errors, contamination, and other artifacts.
 + Arguments:
-+  `-V somatic_m2.vcf.gz`
-    +  Input VCF file generated by Mutect2, containing raw somatic variants (before filtering).
-+  `--contamination-table contamination.table`
-    +  Provides contamination estimates from CalculateContamination to filter out potential contaminant alleles.
-+  `-R Homo_sapiens_assembly38.fasta`
-    +  Reference genome (GRCh38) used for consistency.
-+  `-O somatic.filtered.vcf.gz
-    +  Output filtered VCF file, containing high-confidence somatic mutations
+  +  `-V somatic_m2.vcf.gz`
+      +  Input VCF file generated by Mutect2, containing raw somatic variants (before filtering).
+  +  `--contamination-table contamination.table`
+      +  Provides contamination estimates from CalculateContamination to filter out potential contaminant alleles.
+  +  `-R Homo_sapiens_assembly38.fasta`
+      +  Reference genome (GRCh38) used for consistency.
+  +  `-O somatic.filtered.vcf.gz
+      +  Output filtered VCF file, containing high-confidence somatic mutations
 
 ```
 gatk FilterMutectCalls \
@@ -263,14 +264,14 @@ zcat somatic.filtered.vcf.gz | grep 'contamiation'
 ### 5. Run GATK CollectSequencingArtifactMetrics
 +  A tool from GATK’s Picard suite that analyzes systematic sequencing errors in BAM files.
 + Arguments:
-+  `-R Homo_sapiens_assembly38.fasta`
-    +  The reference genome (GRCh38) used for alignment.
-+  `-I tumor.bam`
-    +  Input BAM file containing aligned reads for the tumor sample.
-+  `EXT ".txt"`
-    +  Specifies the file extension for output reports (default is .metrics, but here it’s set to .txt).
-+  `-O tumor_artifact`
-    +  Prefix for the output artifact metrics files.
+  +  `-R Homo_sapiens_assembly38.fasta`
+      +  The reference genome (GRCh38) used for alignment.
+  +  `-I tumor.bam`
+      +  Input BAM file containing aligned reads for the tumor sample.
+  +  `EXT ".txt"`
+      +  Specifies the file extension for output reports (default is .metrics, but here it’s set to .txt).
+  +  `-O tumor_artifact`
+      +  Prefix for the output artifact metrics files.
 
 ```
 gatk CollectSequencingArtifactMetrics \
@@ -285,8 +286,9 @@ gatk CollectSequencingArtifactMetrics \
 
 ## 5. Annotate Variants
 ### Functional annotation 
-(snpEff) → Predicts functional effects of mutations
 + This steps functionally annotates somatic variants using SnpEff and SnpSift.
++ SnpEff for variant annotation
++ SnpSift for variant filtering and post-processing of annotated VCF files
 
 #### SnpEff does not accept compressed VCF files. So unzip the file.
 ```
@@ -312,7 +314,7 @@ snpEff -Xmx2g ann hg38 -v -s snpeff.html somatic.filtered.vcf > somatic.filtered
 +  Input annotated VCF.
 +  Output VCF, now with dbSNP annotations.
 +  Adds known dbSNP IDs (rsIDs) to the VCF.
-    +  `/home/bqhs/hg38/dbsnp_146.hg38.vcf.gz` - From reference dbSNP database (version 146, built for hg38).
+    +  `/home/bqhs/hg38/dbsnp_146.hg38.vcf.gz`  Reference dbSNP database (version 146, built for hg38).
 
 
 ```
@@ -366,12 +368,12 @@ cnvkit.py version
 
 
 ### Run CNV detection using CNVKit
-+ (cnvkit.py batch) → Detects large deletions/amplifications
++ `cnvkit.py batch` → Detects large deletions/amplifications
 + This CNVkit command processes somatic copy number variations (CNVs) in a tumor-normal paired analysis. It generates CNV profiles for the tumor sample using a matched normal sample for comparison.
 +  Starting files:
-  +  Use the same BAM files and reference genome as Mutect2 exercise
-  +  Target list: /home/bqhs/mutect2/targets_chr17.interval_list
-  +  Gene annotation: /home/bqhs/mutect2/refFlat.txt
+    - Use the same BAM files and reference genome as Mutect2 exercise
+    - Target list: /home/bqhs/mutect2/targets_chr17.interval_list
+    - Gene annotation: /home/bqhs/mutect2/refFlat.txt
 +  Observe the effect of changing the purity setting when converting to copy number (integers)
   
 ```
@@ -389,9 +391,9 @@ cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
 + This command calls copy number alterations (CNAs) from the segmented CNV data (tumor.cns). It converts log2 ratio values into discrete copy number states (e.g., deletions, amplifications, and neutral regions).
 + CNVkit infers integer copy numbers from the log2 ratio data in tumor.cns.
 +  It classifies segments as:
-  +  Loss (CN < 2, e.g., deletions)
-  +  Gain (CN > 2, e.g., amplifications)
-  +  Neutral (CN = 2, normal diploid regions)
+  - Loss (CN < 2, e.g., deletions)
+  - Gain (CN > 2, e.g., amplifications)
+  - Neutral (CN = 2, normal diploid regions)
 
 ```
 cd cnvkit_output
@@ -407,12 +409,12 @@ conda deactivate
 ### Few more steps
 #### Examine results in IGV. 
 +  Load:
-  +  The BAM files
-  +  Germline AF resource and PoN VCF
-  +  Your filtered Mutect2 results (VCF)
-  +  What do you observe at these sites?
-  +  chr17:7,666,402-7,689,550
-  +  chr17: 7,221,420; 19,748,387; 50,124,771
+  - The BAM files
+  - Germline AF resource and PoN VCF
+  - Your filtered Mutect2 results (VCF)
+  - What do you observe at these sites?
+  - chr17:7,666,402-7,689,550
+  - chr17: 7,221,420; 19,748,387; 50,124,771
 
 
 
