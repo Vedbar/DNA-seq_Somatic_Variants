@@ -89,17 +89,17 @@ Observe the effect of changing the purity setting when converting to copy number
 
 ### Steps Common to Germline and Somatic Variants
 1. Quality Control:
-  +  FastQC, Trimmomatic → Checks read quality and trims adapters.
+    +  FastQC, Trimmomatic → Checks read quality and trims adapters.
 2. Read Alignment:
-  + bwa mem → Maps reads to the reference genome.
+    + bwa mem → Maps reads to the reference genome.
 3. Sort alignment
-  + samtools sort → Organizes BAM file
+    + samtools sort → Organizes BAM file
 4. Mark duplicates
-  +  picard MarkDuplicates → Removes PCR artifacts
+    +  picard MarkDuplicates → Removes PCR artifacts
 5. Recalibrate base quality scores
-  +  GATK BaseRecalibrator & gatk ApplyBQSR → Adjusts systematic sequencing errors
+    +  GATK BaseRecalibrator & gatk ApplyBQSR → Adjusts systematic sequencing errors
 6. Index BAM file
-  +  samtools index → Enables efficient access to BAM files.
+    +  samtools index → Enables efficient access to BAM files.
 
 
 ---
