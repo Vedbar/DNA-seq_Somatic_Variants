@@ -98,7 +98,7 @@ cd Somatic_mutation/Exercise
 +  GATK Mutect2 is a variant caller used to detect somatic mutations in cancer samples.
 +  It compares sequencing data from a tumor sample to a matched normal sample (if available) to identify mutations unique to the tumor.
 +  Arguments:
-  +  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
+  - `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
       -  Reference genome (GRCh38) used to align reads and determine variant locations.
   +  `-I /home/bqhs/mutect2/tumor.bam`
       -  Input tumor BAM file (aligned reads from the cancer sample).
