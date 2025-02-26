@@ -305,30 +305,32 @@ gatk CollectSequencingArtifactMetrics \
 (snpEff) → Predicts functional effects of mutations
 + This steps functionally annotates somatic variants using SnpEff and SnpSift.
 
-#### Needed because SnpEff does not accept compressed VCF files
+#### SnpEff does not accept compressed VCF files. So unzip the file.
 ```
 gunzip -c somatic.filtered.vcf.gz > somatic.filtered.vcf
 ```
 
 #### snpEff is a variant effect predictor that annotates variants with their potential functional impact.
-+  Arguments:
-+  `-Xmx2g` Allocates 2GB of memory for Java (adjust if needed).
-+  `ann` Annotation mode.
-+  `hg38` Reference genome database (ensure it is installed in SnpEff).
-+  `-v` Verbose mode (detailed logs).
-+  `-s snpeff.html` Generates a summary report (snpeff.html), which includes: Variant effects, Gene and protein impact predictions
 +  Input: somatic.filtered.vcf (filtered somatic variants).
 +  Output: somatic.filtered.ann.vcf (annotated VCF file).
++  Arguments:
+  +  `-Xmx2g` Allocates 2GB of memory for Java (adjust if needed).
+  +  `ann` Annotation mode.
+  +  `hg38` Reference genome database (ensure it is installed in SnpEff).
+  +  `-v` Verbose mode (detailed logs).
+  +  `-s snpeff.html` Generates a summary report (snpeff.html), which includes: Variant effects, Gene and protein impact predictions
+
 
 ```
 snpEff -Xmx2g ann hg38 -v -s snpeff.html somatic.filtered.vcf > somatic.filtered.ann.vcf
 ```
 
 #### Annotate with dbSNP Using SnpSift
-+  Adds known dbSNP IDs (rsIDs) to the VCF.
-+  `/home/bqhs/hg38/dbsnp_146.hg38.vcf.gz` Reference dbSNP database (version 146, built for hg38).
 +  Input annotated VCF.
 +  Output VCF, now with dbSNP annotations.
++  Adds known dbSNP IDs (rsIDs) to the VCF.
+    +  `/home/bqhs/hg38/dbsnp_146.hg38.vcf.gz` - From reference dbSNP database (version 146, built for hg38).
+
 
 ```
 SnpSift annotate /home/bqhs/hg38/dbsnp_146.hg38.vcf.gz somatic.filtered.ann.vcf > somatic.filtered_1.ann.vcf
