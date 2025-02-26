@@ -248,7 +248,7 @@ gatk CalculateContamination \
   -O contamination.table
 ```
 
-### 4. gatk FilterMutectCalls
+### 4. Run GATK FilterMutectCalls
 + Filter somatic variants → Removes low-confidence calls
 + Removes false positives caused by sequencing errors, contamination, and other artifacts.
 + Arguments:
