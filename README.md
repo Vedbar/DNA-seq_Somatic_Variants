@@ -189,10 +189,10 @@ zcat somatic_m2.vcf.gz | grep '##INFO'
 +  `-L targets_chr17.interval_list`
     -  Restricts analysis to specific genomic regions (e.g., targeted exome or panel).
 + `O normal.pileups.table`
-    – Output file storing pileup summaries, including:
-        -  Chromosome, position, reference allele
-        -  Counts for reference and alternative alleles
-        -  Population allele frequency estimates
+    - Output file storing pileup summaries, including:
+      +  Chromosome, position, reference allele
+      +  Counts for reference and alternative alleles
+      +  Population allele frequency estimates
 + This step is preparation for contamination estimation, which is crucial for Mutect2 variant calling.
 + Helps detect tumor-normal contamination by analyzing allele frequencies in the normal sample.
 
@@ -210,9 +210,10 @@ gatk GetPileupSummaries \
 gatk GetPileupSummaries \
   -R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta \
   -I /home/bqhs/mutect2/tumor.bam \
-  -V /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz \  
+  -V /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz \
   -L /home/bqhs/mutect2/targets_chr17.interval_list \
   -O tumor.pileups.table
+
 
 ```
 
