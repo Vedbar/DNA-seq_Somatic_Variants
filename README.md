@@ -97,7 +97,7 @@ Observe the effect of changing the purity setting when converting to copy number
 4. Mark duplicates
     +  picard MarkDuplicates → Removes PCR artifacts
 5. Recalibrate base quality scores
-    +  GATK BaseRecalibrator & gatk ApplyBQSR → Adjusts systematic sequencing errors
+    +  GATK BaseRecalibrator & GATK ApplyBQSR → Adjusts systematic sequencing errors
 6. Index BAM file
     +  samtools index → Enables efficient access to BAM files.
 
@@ -117,9 +117,9 @@ cd Somatic_mutation/Exercise
 +  Arguments:
 +  `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
     -  Reference genome (GRCh38) used to align reads and determine variant locations.
-+  '-I /home/bqhs/mutect2/tumor.bam`
++  `-I /home/bqhs/mutect2/tumor.bam`
     -  Input tumor BAM file (aligned reads from the cancer sample).
-+  '-tumor HCC1143_tumor`
++  `-tumor HCC1143_tumor`
     -  Specifies the tumor sample name in the BAM file.
 + `-I /home/bqhs/mutect2/normal.bam`
     -  Input normal BAM file (optional) – helps filter out germline mutations.
