@@ -230,7 +230,7 @@ cat normal.pileups.table | grep '^chr17' | awk '$5>=3'
 ```
 
 
-### 3. gatk CalculateContamination
+### 3. Run GATK CalculateContamination
 + This estimates tumor sample contamination using allele frequencies from the pileup summaries.
 + Arguments:
 + `-I tumor.pileups.table`
@@ -277,7 +277,7 @@ zcat somatic.filtered.vcf.gz | grep 'PASS'
 zcat somatic.filtered.vcf.gz | grep 'contamiation'
 ```
 
-### 5. gatk CollectSequencingArtifactMetrics
+### 5. Run GATK CollectSequencingArtifactMetrics
 +  A tool from GATK’s Picard suite that analyzes systematic sequencing errors in BAM files.
 + Arguments:
 +  `-R Homo_sapiens_assembly38.fasta`
