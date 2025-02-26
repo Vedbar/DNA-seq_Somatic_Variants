@@ -220,6 +220,9 @@ gatk GetPileupSummaries \
 #### Displays the contents of the tumor pileup summary table.
 + Filters for lines that start with "chr17"
 + Uses awk to check if the fifth column (alternate allele count) is greater than or equal to 3.
+    - The 5th column represents the number of alternate allele supporting reads at a given site. This filters sites where at least 3 reads support an alternate allele.
+
+      
   
 ```
 cat tumor.pileups.table | grep '^chr17' | awk '$5>=3'
