@@ -408,8 +408,8 @@ conda deactivate
 ---
 ### Few more steps
 #### Examine results in IGV. 
-+  Load:
-  - The BAM files
++ Load:
+  - The The BAM files
   - Germline AF resource and PoN VCF
   - Your filtered Mutect2 results (VCF)
   - What do you observe at these sites?
