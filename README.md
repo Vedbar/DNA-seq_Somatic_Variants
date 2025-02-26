@@ -65,23 +65,6 @@ conda config --add channels conda-forge
 +  In the interest of time,somatic variant calling analysis is restricted to chromosome 17 
 +  Common biallelic SNPs: /home/bqhs/mutect2/chr17_small_exac_common_3_grch38.vcf.gz (for GetPileupSummaries)
 
-Run the pipeline: Mutect2, filter contamination and orientation bias
-When running Mutect2, specify –L /home/bqhs/mutect2/chr17plus.interval_list
-Examine results in IGV. Load:
-The BAM files
-Germline AF resource and PoN VCF
-Your filtered Mutect2 results (VCF)
-What do you observe at these sites?
-chr17:7,666,402-7,689,550
-chr17: 7,221,420; 19,748,387; 50,124,771
-
-CNVKit
-Starting files:
-Use the same BAM files and reference genome as Mutect2 exercise
-Target list: /home/bqhs/mutect2/targets_chr17.interval_list
-Gene annotation: /home/bqhs/mutect2/refFlat.txt
-Run CNVkit
-Observe the effect of changing the purity setting when converting to copy number (integers)
 
 ---
 
@@ -382,10 +365,15 @@ cnvkit.py version
 ```
 
 
-### Run CNV detection 
+### Run CNV detection using CNVKit
 + (cnvkit.py batch) → Detects large deletions/amplifications
 + This CNVkit command processes somatic copy number variations (CNVs) in a tumor-normal paired analysis. It generates CNV profiles for the tumor sample using a matched normal sample for comparison.
-
++  Starting files:
+  +  Use the same BAM files and reference genome as Mutect2 exercise
+  +  Target list: /home/bqhs/mutect2/targets_chr17.interval_list
+  +  Gene annotation: /home/bqhs/mutect2/refFlat.txt
++  Observe the effect of changing the purity setting when converting to copy number (integers)
+  
 ```
 cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
     -n /home/bqhs/mutect2/normal.bam \
@@ -410,11 +398,23 @@ cd cnvkit_output
 cnvkit.py call tumor.cns -o tumor.call.cns 
 ```
 
+
 ### Deactivate Environment After Running
 ```
 conda deactivate
 ```
 ---
+### Few more steps
+#### Examine results in IGV. 
++  Load:
+  +  The BAM files
+  +  Germline AF resource and PoN VCF
+  +  Your filtered Mutect2 results (VCF)
+  +  What do you observe at these sites?
+  +  chr17:7,666,402-7,689,550
+  +  chr17: 7,221,420; 19,748,387; 50,124,771
 
 
+
+---
 
