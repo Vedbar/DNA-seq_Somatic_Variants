@@ -98,23 +98,23 @@ cd Somatic_mutation/Exercise
 +  GATK Mutect2 is a variant caller used to detect somatic mutations in cancer samples.
 +  It compares sequencing data from a tumor sample to a matched normal sample (if available) to identify mutations unique to the tumor.
 +  Arguments:
-  - `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
+  + `-R /home/bqhs/mutect2/Homo_sapiens_assembly38.fasta`
       -  Reference genome (GRCh38) used to align reads and determine variant locations.
-  +  `-I /home/bqhs/mutect2/tumor.bam`
-      -  Input tumor BAM file (aligned reads from the cancer sample).
-  +  `-tumor HCC1143_tumor`
+  + `-I /home/bqhs/mutect2/tumor.bam`
+      -  Input tumor BAM file (aligned reads from the cancer sample).  
+  + `-tumor HCC1143_tumor`
       -  Specifies the tumor sample name in the BAM file.
   + `-I /home/bqhs/mutect2/normal.bam`
       -  Input normal BAM file (optional) – helps filter out germline mutations.
-  +  `-normal HCC1143_normal`
+  + `-normal HCC1143_normal`
       -  Specifies the normal sample name in the BAM file.
-  +  `-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz`
+  + `-pon /home/bqhs/mutect2/chr17_m2pon.vcf.gz`
       -  Panel of Normals (PoN), a database of common sequencing artifacts (not real mutations) to avoid false positives.
-  +  `--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
+  + `--germline-resource /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz`
       -  Germline variant database (gnomAD) used to filter out inherited variants so only tumor-specific mutations remain.
-  +  `-L /home/bqhs/mutect2/chr17plus.interval_list`
+  + `-L /home/bqhs/mutect2/chr17plus.interval_list`
       -  Restricts analysis to specific regions (in this case, chromosome 17) to save time and focus on key areas.
-  +  `-O somatic_m2.vcf.gz`
+  + `-O somatic_m2.vcf.gz`
       - Output VCF file where the detected somatic variants are stored.
 
 ```
