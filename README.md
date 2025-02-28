@@ -391,9 +391,9 @@ cnvkit.py batch /home/bqhs/mutect2/tumor.bam \
 + This command calls copy number alterations (CNAs) from the segmented CNV data (tumor.cns). It converts log2 ratio values into discrete copy number states (e.g., deletions, amplifications, and neutral regions).
 + CNVkit infers integer copy numbers from the log2 ratio data in tumor.cns.
 +  It classifies segments as:
-  - Loss (CN < 2, e.g., deletions)
-  - Gain (CN > 2, e.g., amplifications)
-  - Neutral (CN = 2, normal diploid regions)
+  + Loss (CN < 2, e.g., deletions)
+  + Gain (CN > 2, e.g., amplifications)
+  + Neutral (CN = 2, normal diploid regions)
 
 ```
 cd cnvkit_output
