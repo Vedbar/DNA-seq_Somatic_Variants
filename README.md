@@ -408,7 +408,7 @@ conda deactivate
 ---
 ### Few more steps
 #### Examine results in IGV. 
-+ Copy Few files and save them in your local machine.
++ Copy few files and save them in your local machine.
   
  ```
 cp /home/bqhs/mutect2/tumor.bam ./
