@@ -409,7 +409,8 @@ conda deactivate
 ### Few more steps
 #### Examine results in IGV. 
 + Copy Few files and save them in your local machine.
-  ```
+  
+ ```
 cp /home/bqhs/mutect2/tumor.bam ./
 cp /home/bqhs/mutect2/normal.bam ./
 samtools index tumor.bam
@@ -417,6 +418,7 @@ samtools index normal.bam
 cp /home/bqhs/mutect2/chr17_m2pon.vcf.gz ./
 cp /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz ./
 ```
+
 + Load:
   - The BAM files
   - Germline AF resource and PoN VCF
