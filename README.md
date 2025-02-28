@@ -400,11 +400,10 @@ cd cnvkit_output
 cnvkit.py call tumor.cns -o tumor.call.cns 
 ```
 
-+ Copy Number Variation (CNV) plot for a tumor sample
+**Copy Number Variation (CNV) plot for a tumor sample**
   
   ![tumor-scatter](tumor-scatter.png "tumor-scatter")
 
-  
 + X-axis (chr17): Represents the genomic position along chromosome 17.
 + Y-axis (Copy Ratio log2): Represents the log2-transformed copy number ratio, where:
   - 0 (baseline) indicates a normal diploid copy number.
@@ -412,7 +411,6 @@ cnvkit.py call tumor.cns -o tumor.call.cns
   - Values below 0 indicate copy number losses (deletions).
 + Gray Dots: Represent individual data points for copy number variations across the chromosome.
 + Orange Segments: Likely represent significant CNV regions, identified by segmentation algorithms.
-  
 
 ### Deactivate Environment After Running
 ```
