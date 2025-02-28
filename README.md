@@ -408,14 +408,25 @@ conda deactivate
 ---
 ### Few more steps
 #### Examine results in IGV. 
++ Copy Few files and save them in your local machine.
+  ```
+cp /home/bqhs/mutect2/tumor.bam ./
+cp /home/bqhs/mutect2/normal.bam ./
+samtools index tumor.bam
+samtools index normal.bam
+cp /home/bqhs/mutect2/chr17_m2pon.vcf.gz ./
+cp /home/bqhs/mutect2/chr17_af-only-gnomad_grch38.vcf.gz ./
+```
 + Load:
-  - The The BAM files
+  - The BAM files
   - Germline AF resource and PoN VCF
   - Your filtered Mutect2 results (VCF)
   - What do you observe at these sites?
   - chr17:7,666,402-7,689,550
-  - chr17: 7,221,420; 19,748,387; 50,124,771
+ 
+ ![IGV_Result_1](IGV_1.PNG "TGV_Result_1") 
 
+![IGV_Result_2](IGV_2.PNG "TGV_Result_2") 
 
 
 ---
